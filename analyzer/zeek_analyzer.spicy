@@ -4,7 +4,7 @@
 
 module Zeek_DNS;
 
-import DNS from protocols;
+import DNS;
 import spicy;
 import zeek;
 
