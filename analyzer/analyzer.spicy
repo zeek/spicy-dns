@@ -1,4 +1,4 @@
-# Copyright (c) 2021 by the Zeek Project. See LICENSE for details.
+# Copyright (c) 2020-2023 by the Zeek Project. See LICENSE for details.
 
 module DNS;
 
@@ -13,8 +13,21 @@ type RRType = enum {
     ANSWER = 1, AUTH = 2, ADDL = 3
 };
 
+# Helper function checks and stores a given input offset. This throws a
+# ParserError if the same offset was previously checkpointed to the same state.
+function checkpointOffset(it: iterator<stream>, inout state: set<uint64>): iterator<stream> {
+    local offset = it.offset();
+    if (offset in state)
+        throw "Potential infinite pointer loop, offset %d was consumed previously" % offset;
+    add state[offset];
+
+    return it;
+}
+
 public type Message = unit {
     %random-access;
+
+    var consumedOffsets: set<uint64>;
 
     header:     Header;
     question:   (Question(self))[self.header.qdcount];
@@ -121,7 +134,7 @@ type Pointer = unit(msg: Message, label: Label) {
         offset: 0..13;
         };
 
-    name: Name(msg) &parse-at=(msg.input() + self.len.offset);
+    name: Name(msg) &parse-at=checkpointOffset(msg.input() + self.len.offset, msg.consumedOffsets);
     };
 
 type Label = unit(msg: Message, inout name: Name) {
@@ -140,7 +153,7 @@ type Label = unit(msg: Message, inout name: Name) {
                         }
                     }
 
-        3 ->    ptr: Pointer(msg, self) &parse-at=self.input() {
+        3 ->    ptr: Pointer(msg, self) &parse-at=checkpointOffset(self.input(), msg.consumedOffsets) {
                     name.label += self.ptr.name.label;
                     self.adjust = 2; # Consume the additional byte in %done.
                     }

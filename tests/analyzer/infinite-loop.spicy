@@ -1,0 +1,5 @@
+# @TEST-DOC: This test validates that inputs containing infinite pointer loops are rejected.
+#
+# @TEST-EXEC: spicyc -dj ${DIST}/analyzer/analyzer.spicy -o analyzer.hlto
+# @TEST-EXEC-FAIL: spicy-driver -d analyzer.hlto -f ${TRACES}/infinite-loop.dat >output 2>&1
+# @TEST-EXEC: btest-diff output
