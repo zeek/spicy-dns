@@ -11,13 +11,13 @@ jobs:
       matrix:
         version:
           - zeek:5.0.4
-          - zeek:5.1.1
+          - zeek:5.2.1
           - zeek-dev:latest
 
       fail-fast: false
 
     runs-on: ubuntu-latest
-    container: zeekurity/${{ matrix.version }}
+    container: zeek/${{ matrix.version }}
 
     steps:
       - uses: actions/checkout@v2
