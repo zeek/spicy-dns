@@ -33,6 +33,8 @@ type Header = unit {
             rd: 7;
             ra: 8;
             z:  9..11;
+            ad: 10;
+            cd: 11;
             rcode: 12..15;
         } &bit-order = spicy::BitOrder::MSB0;
 

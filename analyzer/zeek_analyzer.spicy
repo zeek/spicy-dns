@@ -31,9 +31,47 @@ public function name(n: DNS::Name) : bytes {
 }
 
 # Converts a DNS::Header into a Zeek dns_msg.
-public function message(hdr: DNS::Header) : tuple<uint64, uint64, uint64, bool, bool, bool, bool, bool, uint64, uint64, uint64, uint64, uint64> {
-    return (hdr.id, hdr.flags.opcode, hdr.flags.rcode, hdr.flags.qr != 0, hdr.flags.aa != 0, hdr.flags.tc != 0, hdr.flags.rd != 0,
-            hdr.flags.ra != 0, hdr.flags.z, hdr.qdcount, hdr.ancount, hdr.nscount, hdr.arcount);
+public function message(hdr: DNS::Header) :
+    tuple<
+        uint64,
+        uint64,
+        uint64,
+        bool,
+        bool,
+        bool,
+        bool,
+        bool,
+        uint64,
+        # With zeek-6.0 and above `dns_msg` contains additional, required fields.
+@if ZEEK_VERSION >= 60000
+        bool,
+        bool,
+@endif
+        uint64,
+        uint64,
+        uint64,
+        uint64
+    >
+{
+    return (
+        hdr.id,
+        hdr.flags.opcode,
+        hdr.flags.rcode,
+        hdr.flags.qr != 0,
+        hdr.flags.aa != 0,
+        hdr.flags.tc != 0,
+        hdr.flags.rd != 0,
+        hdr.flags.ra != 0,
+        hdr.flags.z,
+@if ZEEK_VERSION >= 60000
+        hdr.flags.ad != 0,
+        hdr.flags.cd != 0,
+@endif
+        hdr.qdcount,
+        hdr.ancount,
+        hdr.nscount,
+        hdr.arcount
+    );
 }
 
 # Converts a DNS::ResourceRecord into a Zeek dns_answer.
