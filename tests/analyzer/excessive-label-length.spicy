@@ -1,0 +1,5 @@
+# @TEST-DOC: Check that inputs with excessive label lengths are rejected. This is a regression test for #7.
+
+# @TEST-EXEC: spicyc -dj ${DIST}/analyzer/analyzer.spicy -o analyzer.hlto
+# @TEST-EXEC-FAIL: spicy-driver analyzer.hlto -f ${TRACES}/excessive-label-lengths.dat >output 2>&1
+# @TEST-EXEC: btest-diff output

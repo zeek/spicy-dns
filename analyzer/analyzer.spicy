@@ -135,14 +135,24 @@ type Label = unit(msg: Message, inout name: Name) {
                     if ( |self.label| ) {
                         name.label += b".";
                         name.label += self.label;
+                        assert_label_len(name.label);
                         }
                     }
 
         3 ->    ptr: Pointer(msg, self) &parse-at=self.input() {
                     name.label += self.ptr.name.label;
+                    assert_label_len(name.label);
 
                     # Consume the additional byte.
                     self.set_input(self.input() + 2);
                     }
     };
 };
+
+# Check for sane label lengths.
+function assert_label_len(labels: bytes) {
+    # DNS restricts domain names to be less than 255 characters long, restrict to
+    # four times that to avoid expensive parsing of really non-conforming DNS.
+    if (|labels| > 1024)
+        throw "maximum supported label length exceeded";
+}
