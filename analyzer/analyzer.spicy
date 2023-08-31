@@ -144,14 +144,9 @@ type Label = unit(msg: Message, inout name: Name) {
 
         3 ->    ptr: Pointer(msg, self) &parse-at=self.input() {
                     name.label += self.ptr.name.label;
-                    self.adjust = 2; # Consume the additional byte in %done.
+
+                    # Consume the additional byte.
+                    self.set_input(self.input() + 2);
                     }
     };
-
-    on %done {
-        if ( self.adjust > 0 )
-            self.set_input(self.input() + self.adjust);
-    }
-
-    var adjust: uint64 = 0;
 };
