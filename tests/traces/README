@@ -5,3 +5,5 @@ We collect them here for convenience only.
 
 - [dns53.pcap](https://github.com/zeek/zeek/blob/master/testing/btest/Traces/dns53.pcap)
 - dns-svr.pcap (self-made)
+- [issue-10.pcap](https://github.com/zeek/spicy-dns/issues/10#issuecomment-1717319651)
+- [issue-11.pcap](https://github.com/zeek/spicy-dns/issues/11#issue-1894086855)
