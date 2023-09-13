@@ -1,6 +1,6 @@
 # @TEST-EXEC: zeek -r ${TRACES}/dns-svr.pcap %INPUT >output
-#     Zeek 3.0 prints intervals differently, leading to a change in TTL; not worth worrying about, so we just skip the diff for 3.0.
-# @TEST-EXEC: if zeek-version 40000; then btest-diff output; fi
+# Zeek 6.0 prints also includes `AD` and `CD` bits in `dns_msg` which leads to a difference in the baselines.
+# @TEST-EXEC: if zeek-version 60000; then btest-diff output; fi
 #
 # @TEST-DOC: Test the DNS SVR event.
 
