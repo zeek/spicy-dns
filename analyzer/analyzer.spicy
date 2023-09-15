@@ -77,10 +77,10 @@ type ResourceRecord = unit(msg: Message, rrtype: RRType) {
         RDType::MX   -> mx:      RDataMX(msg);
         RDType::SOA  -> soa:     RDataSOA(msg);
         RDType::SRV  -> srv:     RDataSRV(msg);
-        RDType::TXT  -> txt:     (CharacterString(msg))[self.rdlen];
+        RDType::TXT  -> txt:     (CharacterString(msg))[] &eod;
 
-        *            -> rdata:   bytes &size=self.rdlen;
-    };
+        *            -> rdata:   bytes &eod;
+    } &size=self.rdlen;
 };
 
 type RDataMX = unit(msg: Message) {
