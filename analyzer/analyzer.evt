@@ -2,10 +2,6 @@
 
 protocol analyzer spicy::DNS over UDP:
     parse with DNS::Message,
-    port 53/udp,
-    port 137/udp,
-    port 5353/udp,
-    port 5355/udp,
     replaces DNS;
 
 import Zeek_DNS;
