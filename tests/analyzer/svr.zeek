@@ -6,5 +6,5 @@
 
 event dns_SRV_reply(c: connection, msg: dns_msg, ans: dns_answer, target: string, priority: count, weight: count, p: count)
    {
-   print c$id, msg, ans, target, priority, weight, p;
+   print c$id$orig_h, c$id$orig_p, c$id$resp_h, c$id$resp_p, msg, ans, target, priority, weight, p;
    }
