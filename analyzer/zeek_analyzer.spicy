@@ -50,7 +50,11 @@ public function message(hdr: DNS::Header) :
         uint64,
         uint64,
         uint64,
-        uint64
+        uint64,
+        # Zeek 8.1 added the is_netbios Boolean. This parser currently always sets this to false.
+@if ZEEK_VERSION >= 80100
+        bool,
+@endif
     >
 {
     return (
@@ -70,7 +74,10 @@ public function message(hdr: DNS::Header) :
         hdr.qdcount,
         hdr.ancount,
         hdr.nscount,
-        hdr.arcount
+        hdr.arcount,
+@if ZEEK_VERSION >= 80100
+        False,
+@endif
     );
 }
 
