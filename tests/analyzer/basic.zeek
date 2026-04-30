@@ -1,17 +1,13 @@
 # Copyright (c) 2021 by the Zeek Project. See LICENSE for details.
 
 # @TEST-EXEC: zeek -r ${TRACES}/dns53.pcap %INPUT
-# @TEST-EXEC: cat conn.log | zeek-cut uid service > conn.log.tmp && mv conn.log.tmp conn.log
-# @TEST-EXEC: cat dns.log | zeek-cut -n opcode opcode_name > dns.log.tmp && mv dns.log.tmp dns.log
-# @TEST-EXEC: btest-diff conn.log
-# @TEST-EXEC: btest-diff dns.log
-# @TEST-EXEC: if zeek-version 32000; then btest-diff .stdout; fi
+# @TEST-EXEC: TEST_DIFF_CANONIFIER='zeek-cut -m uid service' btest-diff conn.log
+# @TEST-EXEC: TEST_DIFF_CANONIFIER='zeek-cut -m -n ts opcode opcode_name' btest-diff dns.log
 #
 # @TEST-DOC: Test DNS analyzer with small trace.
 
-@if ( Version::number >= 32000 )
 # Check the new signature of the event
 event dns_query_reply(c: connection, msg: dns_msg, query: string, qtype: count, qclass: count, original_query: string) {
-   print query, original_query; # both are the same with our trace
+   # Both are the same with our trace.
+   assert query == original_query, fmt("%s != %s", query, original_query);
 }
-@endif
