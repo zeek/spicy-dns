@@ -2,6 +2,7 @@
 
 # @TEST-EXEC: zeek -r ${TRACES}/dns53.pcap %INPUT
 # @TEST-EXEC: cat conn.log | zeek-cut uid service > conn.log.tmp && mv conn.log.tmp conn.log
+# @TEST-EXEC: cat dns.log | zeek-cut -n opcode opcode_name > dns.log.tmp && mv dns.log.tmp dns.log
 # @TEST-EXEC: btest-diff conn.log
 # @TEST-EXEC: btest-diff dns.log
 # @TEST-EXEC: if zeek-version 32000; then btest-diff .stdout; fi
